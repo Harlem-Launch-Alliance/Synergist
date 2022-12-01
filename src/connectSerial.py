@@ -1,6 +1,7 @@
 import sys
 import glob
 import serial
+import time
 
 
 def serial_ports():
@@ -31,30 +32,32 @@ def serial_ports():
             pass
     return result
 
+def choosePort():
+    print("Please enter the number corresponding to your serial port.")
+    serial_port_array = serial_ports()
+    
+    #while no serial ports present, keep checking for new devices
+    while(len(serial_port_array) == 0):
+        print("No serial port found. Check your connection.")
+        serial_port_array = serial_ports()
+        time.sleep(5)
 
-print("Which port would you like to use: ")
-serial_port_array = serial_ports()
-# if len(serial_port_array = 0):
-#     print("No serial port found. Check your connection")
-port_count = 0
-for i in serial_port_array:
-    string = str(port_count)
-    print(string + ": " + i) 
-    port_count +=1
+    for i in range(len(serial_port_array)):
+        print(f"{i}: {serial_port_array[i]}")
+        
+    while(True):
+        portNumber = input()
+        if not portNumber.isnumeric():
+            print("Enter an integer.")
+            continue
+        portNumber = int(portNumber)
+        if(len(serial_port_array) <= portNumber or portNumber<0):
+            print("Please enter a number between 0 and " + str(len(serial_port_array)-1))
+            continue
+        break
 
-success = False
-while(not success):
-    x = input()
-    if not x.isnumeric():
-        print("Enter an Integer")
-    else:
-        x = int(x)
-        if(len(serial_port_array) <= x or x<0):
-            print("Your integer must be between 0 and " + str(len(serial_port_array)-1))
-        else:
-            success = True
-
-print("Your serial port " + str(x))
+    print("Your serial port is " + str(serial_port_array[portNumber]))
+    return serial_port_array[portNumber]
 
 
 
