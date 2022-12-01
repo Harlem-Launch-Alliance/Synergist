@@ -30,3 +30,32 @@ def serial_ports():
         except (OSError, serial.SerialException):
             pass
     return result
+
+
+print("Which port would you like to use: ")
+serial_port_array = serial_ports()
+# if len(serial_port_array = 0):
+#     print("No serial port found. Check your connection")
+port_count = 0
+for i in serial_port_array:
+    string = str(port_count)
+    print(string + ": " + i) 
+    port_count +=1
+
+success = False
+while(not success):
+    x = input()
+    if not x.isnumeric():
+        print("Enter an Integer")
+    else:
+        x = int(x)
+        if(len(serial_port_array) <= x or x<0):
+            print("Your integer must be between 0 and " + str(len(serial_port_array)-1))
+        else:
+            success = True
+
+print("Your serial port " + str(x))
+
+
+
+
