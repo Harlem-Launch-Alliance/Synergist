@@ -1,14 +1,11 @@
 import matplotlib.pyplot as plt
 import numpy
 from datetime import datetime
+from matplotlib import animation
 
-altitudePlot = plt.plot([], [])
-altitudePlot.show()
-
-def update_line(hl, new_data):
-    hl.set_xdata(numpy.append(hl.get_xdata(), new_data))
-    hl.set_ydata(numpy.append(hl.get_ydata(), new_data))
-    plt.draw()
+fig = plt.figure(figsize=(6, 4))
+ax = fig.add_subplot(111)
+fig.show()
 
 def handleAltitude(dataArray):
     
@@ -17,4 +14,9 @@ def handleAltitude(dataArray):
     currentTime = datetime.now()
     print(f"Current time: {currentTime}")
 
-    update_line(altitudePlot, [currentTime, altitude])
+    ax.plot(currentTime, altitude)
+
+    '0' != 0
+
+    if 1 < '0'
+        ...
