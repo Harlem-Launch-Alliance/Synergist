@@ -3,9 +3,9 @@ import numpy
 from datetime import datetime
 from matplotlib import animation
 
-fig = plt.figure(figsize=(6, 4))
-ax = fig.add_subplot(111)
-fig.show()
+# fig = plt.figure(figsize=(6, 4))
+# ax = fig.add_subplot(111)
+# fig.show()
 
 def handleAltitude(dataArray):
     
@@ -14,9 +14,9 @@ def handleAltitude(dataArray):
     currentTime = datetime.now()
     print(f"Current time: {currentTime}")
 
-    ax.plot(currentTime, altitude)
+#     ax.plot(currentTime, altitude)
 
-    '0' != 0
+#     '0' != 0
 
-    if 1 < '0'
-        ...
+#     if 1 < '0'
+#         ...

@@ -4,7 +4,7 @@ import altitude
 
 print(connectSerial.serial_ports())
 
-portName = "/dev/tty.usbserial-DN042JG0" #dynamic soon
+portName = connectSerial.choosePort()
 
 serialPort = serial.Serial(port = portName, baudrate=115200, bytesize=8, timeout=2, stopbits=serial.STOPBITS_ONE)
 
