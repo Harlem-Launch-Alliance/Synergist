@@ -1,22 +1,21 @@
-import matplotlib.pyplot as plt
-import numpy
 from datetime import datetime
-from matplotlib import animation
-
-# fig = plt.figure(figsize=(6, 4))
-# ax = fig.add_subplot(111)
-# fig.show()
+import dash
+from dash import dcc
+from dash import html
+import plotly.graph_objects as go
+import time
 
 def handleAltitude(dataArray):
-    
     altitude = dataArray[3]
     print(f"Altitude (m): {altitude}")
     currentTime = datetime.now()
     print(f"Current time: {currentTime}")
 
-#     ax.plot(currentTime, altitude)
+def startDash():
+    app = dash.Dash()
+    fig = go.FigureWidget()
+    fig.add_scatter(y=[0], x=[0])
+    scatter = fig.data[0]
+    app.layout = html.Div([dcc.Graph(id="altitude", figure=fig)])
 
-#     '0' != 0
-
-#     if 1 < '0'
-#         ...
+    app.run_server(use_reloader=False)
