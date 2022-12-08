@@ -1,9 +1,8 @@
 from datetime import datetime
 import dash
-from dash import dcc
-from dash import html
+from dash import dcc, html
 import plotly.graph_objects as go
-import time
+import cache
 
 def handleAltitude(dataArray):
     altitude = dataArray[3]
