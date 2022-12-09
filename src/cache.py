@@ -12,9 +12,16 @@ datatypes = {
     "2": "Orientation"
 }
 
-altitudeCache = []
+altitudeCache = {
+    "altitude": [],
+    "time": []
+}
 
 def cacheValue(dataString):
     dataArray = dataString.split()
-    currentTime = datetime.now()
-    altitudeCache.append([currentTime, dataArray[3]])
+    if(len(dataArray) < 2 or not dataArray[1].isnumeric()):
+        print(dataString)
+        return
+    currentTime = datetime.fromtimestamp(int(dataArray[0])/1000.0)
+    altitudeCache["time"].append(currentTime)
+    altitudeCache["altitude"].append(float(dataArray[4]))

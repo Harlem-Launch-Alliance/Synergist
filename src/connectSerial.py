@@ -33,8 +33,9 @@ def serial_ports():
     return result
 
 def choosePort():
-    print("Please enter the number corresponding to your serial port.")
     serial_port_array = serial_ports()
+    
+    print("Please enter the number corresponding to your serial port.")
     
     #while no serial ports present, keep checking for new devices
     while(len(serial_port_array) == 0):
