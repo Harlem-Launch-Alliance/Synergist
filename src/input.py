@@ -11,7 +11,7 @@ import random
 def getTestInput(cache, portName):
     while(1):
         time.sleep(.1)
-        dataValue = f"0 0 0 {random.randint(3, 9)}"
+        dataValue = f"0 0 0 {round(random.uniform(-1, 1),2)}"
         milliseconds = str(int(time.time() * 1000))
         dataString = milliseconds + " " + dataValue
         cache.put(dataString)
