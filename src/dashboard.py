@@ -49,9 +49,9 @@ def updateDashboard(n):
         )
     )
     if(cache.flightState["ASCENDING"] != 0):
-        altitudeFig.add_vline(x=cache.flightState["ASCENDING"].timestamp() * 1000, line_dash="dash", line_color="green", annotation_text="LAUNCH DETECTED", annotation_textangle=-90, annotation_position="top left")
+        altitudeFig.add_vline(x=cache.flightState["ASCENDING"].timestamp() * 1000, line_dash="dash", line_color="orange", annotation_text="LAUNCH DETECTED", annotation_textangle=-90, annotation_position="top left")
     if(cache.flightState["DESCENDING"] != 0):
-        altitudeFig.add_vline(x=cache.flightState["DESCENDING"].timestamp() * 1000, line_dash="dash", line_color="red", annotation_text="APOGEE DETECTED", annotation_textangle=-90, annotation_position="bottom left")
+        altitudeFig.add_vline(x=cache.flightState["DESCENDING"].timestamp() * 1000, line_dash="dash", line_color="orange", annotation_text="APOGEE DETECTED", annotation_textangle=-90, annotation_position="bottom left")
     if(cache.flightState["LANDED"] != 0):
         altitudeFig.add_vline(x=cache.flightState["LANDED"].timestamp() * 1000, line_dash="dash", line_color="orange", annotation_text="LANDING DETECTED", annotation_textangle=-90, annotation_position="top left")
 

@@ -33,7 +33,7 @@ def getInput(cache, portName):
 
             #serialPort.write(b"Hi \r\n") # This can be used to send a message to the flight computer
 
-def getTestInput(cache, portName):
+def getTestInput(cache, portName): #generate sample telemtry for testing the dashboard
     counter = 0
     while(1):
         counter += 1
