@@ -2,7 +2,7 @@ from multiprocessingQueue import MyQueue
 from multiprocessing import Process
 import input
 import time
-import altitude
+import dashboard
 import sys
 import connectSerial
 
@@ -19,7 +19,7 @@ if __name__ == '__main__':
     else:
         portName = connectSerial.choosePort()
     
-    display = Process(target=altitude.startDash, args=(inputCache,)) #create dashboard as independent process
+    display = Process(target=dashboard.startDash, args=(inputCache,)) #create dashboard as independent process
     serialInput = Process(target=inputFunc, args=(inputCache, portName,)) #create serial input as independent process
     #TODO create data logging as independent process
 

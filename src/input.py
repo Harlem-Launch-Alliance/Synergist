@@ -8,14 +8,6 @@ import serial
 import time
 import random
 
-def getTestInput(cache, portName):
-    while(1):
-        time.sleep(.1)
-        dataValue = f"0 0 0 {round(random.uniform(-1, 1),2)}"
-        milliseconds = str(int(time.time() * 1000))
-        dataString = milliseconds + " " + dataValue
-        cache.put(dataString)
-
 def getInput(cache, portName):
 
     serialPort = serial.Serial(port = portName, baudrate=115200, bytesize=8, timeout=2, stopbits=serial.STOPBITS_ONE)
@@ -39,7 +31,24 @@ def getInput(cache, portName):
             dataString = milliseconds + " " + dataValue
             cache.put(dataString)
 
-            #first piece of data is the type (0: flight state, 1: altitude etc..)
-            #next pieces of data will depend on datatype, so should be handled independently (perhaps with a switch?)
-
             #serialPort.write(b"Hi \r\n") # This can be used to send a message to the flight computer
+
+def getTestInput(cache, portName):
+    counter = 0
+    while(1):
+        counter += 1
+        time.sleep(.1)
+        altitude = round(max(random.uniform(-1, 1), 500 - ((counter/10 - 50) * (counter/10 - 50)) + random.uniform(-1, 1)),2)
+        if(counter < 280 and counter % 10 == 0):
+            dataValue = f"0 0"
+        elif(counter < 519 and counter % 10 == 0):
+            dataValue = f"0 1"
+        elif(counter < 800 and counter % 10 == 0):
+            dataValue = f"0 2"
+        elif(counter % 10 == 0):
+            dataValue = f"0 3"
+        else:
+            dataValue = f"1 {altitude}"
+        milliseconds = str(int(time.time() * 1000))
+        dataString = milliseconds + " " + dataValue
+        cache.put(dataString)
