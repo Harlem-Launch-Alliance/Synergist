@@ -1,17 +1,23 @@
 import csv
 
-header = ['time, altitude']
-input = [[1, 0],[2, 20],[3, 100],[4,120]]
+header = ['time', 'altitude']
+values = [[1, 0],[2, 20],[3, 100],[4,120]]
 
-def datalog(input):
+def datalog(title, inputs):
     # open the file in the write mode
     with open('altitude.csv', 'w', newline='') as csvfile:
         # create the csv writer
         writer = csv.writer(csvfile)
         #write the header
-        writer.writerow(header)
+        writer.writerow(title)
         # write the data
-        writer.writerow(input)
+        writer.writerows(inputs)
+        for i in range(len(inputs),0,-1):
+            inputs.pop(i-1)
+
+
+datalog(header, values)
+print(values)
 
 
 
