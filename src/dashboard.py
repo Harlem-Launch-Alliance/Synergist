@@ -10,6 +10,8 @@ import vtk
 from dash_vtk.utils import to_mesh_state
 from vtkmodules.vtkImagingCore import vtkRTAnalyticSource
 import os
+import numpy as np
+from datetime import timedelta
 
 app = dash.Dash()
 
@@ -91,10 +93,30 @@ def startDash(dataQueue):
 
 #update Altitude Graph
 def updateAltitude():
+
+    altitudeTime = np.asarray(cache.altitudeCache["time"])
+    altitudeData = np.asarray(cache.altitudeCache["altitude"])
+
+    if(cache.flightState["ASCENDING"] != 0):
+        #check to see if launch detected
+
+        timeBeforeLaunch = altitudeTime > cache.flightState["ASCENDING"] - timedelta(seconds=10) #select the data from T-10 from launch and beyond
+
+        altitudeData = np.extract(timeBeforeLaunch, altitudeData)
+        altitudeTime = np.extract(timeBeforeLaunch, altitudeTime)
+
+    if(cache.flightState["last"] == "LANDED" and cache.altitudeCache["time"][-1].timestamp() * 1000 >= (cache.flightState["LANDED"].timestamp() * 1000 + 5000)):
+        #check to see if the time on the data is 5 seconds after the landing
+
+        timeAfterLanding =  altitudeTime < cache.flightState["LANDED"] + timedelta(seconds=5) #select the data up to T+5 from landing
+
+        altitudeData = np.extract(timeAfterLanding, altitudeData)
+        altitudeTime = np.extract(timeAfterLanding, altitudeTime)
+
     fig = go.Figure(
         data=[go.Scatter
-            (x=cache.altitudeCache["time"], 
-            y=cache.altitudeCache["altitude"])
+            (x=altitudeTime, 
+            y=altitudeData)
         ],
         layout=go.Layout(
             title="Altitude",
@@ -102,7 +124,7 @@ def updateAltitude():
             height=500,
             template="plotly_dark",
             xaxis={'title': "Time"},
-            yaxis={'title': "Altitude (m)", 'range': (min(cache.altitudeCache["altitude"]), max(cache.altitudeCache["altitude"]) * 1.01 + 10)},
+            yaxis={'title': "Altitude (m)", 'range': (min(altitudeData), max(altitudeData) * 1.01 + 10)},
         )
     )
     if(cache.flightState["ASCENDING"] != 0):
