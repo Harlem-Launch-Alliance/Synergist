@@ -63,8 +63,11 @@ app.layout = html.Div(
             id='interval-component',
             interval=500, # in milliseconds
             n_intervals=0
-        )
-    ], style={'backgroundColor': '#111111', 'margin-top':'-20px', 'height':'1000px', 'width': '100%'}
+        ),
+        html.Div([
+            dcc.Graph(id="LocationMap", figure=go.FigureWidget())
+        ], style={"width": "50%", "height": "30%"})
+    ], style={'backgroundColor': '#111111', 'margin-top':'-20px', 'height':'1200px', 'width': '100%'}
 )
 
 #removes log spam from incoming connections
@@ -76,6 +79,7 @@ log.setLevel(logging.ERROR)
         Output('altitude', 'figure'),
         Output('flightState', 'children'),
         Output('orientation', 'cameraViewUp'),
+        Output('LocationMap','figure'),
         Input('interval-component', 'n_intervals'))
 def updateDashboard(n):
     while(not inputCache.empty()):
@@ -83,7 +87,8 @@ def updateDashboard(n):
     altitudeFig = updateAltitude()
     currentState = updateFlightState()
     orientation = updateOrientation()
-    return altitudeFig, currentState, orientation
+    mapFig = updateMap()
+    return altitudeFig, currentState, orientation, mapFig
 
 #start Dashboard with above configuration
 def startDash(dataQueue):
@@ -142,3 +147,22 @@ def updateFlightState():
 
 def updateOrientation():
     return [0,1,0]
+
+def updateMap():
+
+    lat = cache.locationCache["latitude"]
+    lon = cache.locationCache["longitude"]
+
+    fig = go.Figure(go.Scattermapbox(lat=lat, lon = lon, mode = "markers+lines", line = dict(width = 1, color = 'blue'), marker = dict(size = 5, color = "blue")))
+
+    fig.update_layout(
+    hovermode='closest',
+    mapbox=dict(
+        style = "open-street-map",
+        center = dict(lat = lat[-1], lon = lon[-1]),
+        zoom = 15
+        ),
+    margin={"r": 0, "t": 0, "l": 0, "b": 0},
+    uirevision="Don't change" #this is not a keyword, as long as this text doesnt change then the mapbox will not reset
+    )
+    return fig

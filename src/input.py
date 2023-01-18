@@ -52,3 +52,11 @@ def getTestInput(cache, portName): #generate sample telemtry for testing the das
         milliseconds = str(int(time.time() * 1000))
         dataString = milliseconds + " " + dataValue
         cache.put(dataString)
+
+        #location data test
+
+        lat = round(max(40, 40.75 + (counter/100 - 3.5)),5)
+        lon = round(max(-74, -73.93 - (counter/100 - 3.5)),5)
+        dataValue = f"3 {lat} {lon}"
+        dataString = milliseconds + " " + dataValue
+        cache.put(dataString)

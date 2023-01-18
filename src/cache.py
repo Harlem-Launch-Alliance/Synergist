@@ -19,6 +19,11 @@ flightState = {
     "last": "ON_PAD"
 }
 
+locationCache = {
+    "latitude": [],
+    "longitude": []
+}
+
 def cacheValue(dataString):
     dataArray = dataString.split()
     if(len(dataArray) < 2 or not dataArray[1].isnumeric()):
@@ -32,6 +37,9 @@ def cacheValue(dataString):
         case "1": #altitude
             altitudeCache["time"].append(currentTime)
             altitudeCache["altitude"].append(float(dataArray[2]))
+        case "3": #location
+            locationCache["latitude"].append(float(dataArray[2]))
+            locationCache["longitude"].append(float(dataArray[3]))
         case _: #default
             print("Invalid data format: ", dataString)
 
