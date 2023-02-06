@@ -1,0 +1,6 @@
+dash==2.8.1
+dash_vtk==0.0.9
+numpy==1.24.1
+plotly==5.13.0
+pyserial==3.5
+vtk==9.2.5
