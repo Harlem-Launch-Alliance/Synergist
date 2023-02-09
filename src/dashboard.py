@@ -158,9 +158,16 @@ def updateMap():
     fig.update_layout(
     hovermode='closest',
     mapbox=dict(
-        style = "open-street-map",
+        style = "white-bg",
         center = dict(lat = lat[-1], lon = lon[-1]),
-        zoom = 15
+        zoom = 15,
+        layers = [{
+            "below": 'traces',
+            "sourcetype": "raster",
+            "source": [
+                "http://localhost:3650/api/maps/test/{z}/{x}/{y}.png"
+            ]
+        }]
         ),
     margin={"r": 0, "t": 0, "l": 0, "b": 0},
     uirevision="Don't change" #this is not a keyword, as long as this text doesnt change then the mapbox will not reset
