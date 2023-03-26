@@ -2,11 +2,19 @@
 A graphical interface for sounding rocket telemetry
 
 ## Quickstart
-1. Install Python 3 and relevant libraries
+1. Download and Install the latest version of [Python](https://www.python.org/downloads/)
 1. Clone this repository
-1. Run `python src/main.py`
+1. Run the following commands:
+    1. `cd Catalyst-UI`
+    1. `pip3 install virtualenv`
+    1. `python3 -m venv venv`
+    1. `source venv/bin/activate`
+    1. `pip3 install -r requirements.txt`
+    1. `python3 src/main.py`
 1. Specify the port for your receiver
-1. Open your browser on `localhost:8050`
+1. Open your browser on [localhost:8050](http://localhost:8050)
+
+
 
 ## Specifications
 This graphical user interface will work with any flight computer that transmits in the following format:
