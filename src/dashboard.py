@@ -74,6 +74,9 @@ def updateAltitude():
         altitudeData = np.extract(timeAfterLanding, altitudeData)
         altitudeTime = np.extract(timeAfterLanding, altitudeTime)
 
+    yRangeMin = min(altitudeData) if len(altitudeData) else 0
+    yRangeMax = max(altitudeData) * 1.01 + 10 if len(altitudeData) else 10
+
     fig = go.Figure(
         data=[go.Scatter
             (x=altitudeTime, 
@@ -85,7 +88,7 @@ def updateAltitude():
             height=500,
             template="plotly_dark",
             xaxis={'title': "Time"},
-            yaxis={'title': "Altitude (m)", 'range': (min(altitudeData), max(altitudeData) * 1.01 + 10)},
+            yaxis={'title': "Altitude (m)", 'range': (yRangeMin, yRangeMax)},
         )
     )
     if(cache.flightState["ASCENDING"] != 0):
@@ -112,7 +115,10 @@ def updateMap():
     hovermode='closest',
     mapbox=dict(
         style = "open-street-map",
-        center = dict(lat = lat[-1], lon = lon[-1]),
+        center = dict(
+            lat = lat[-1] if len(lat) else 0, 
+            lon = lon[-1] if len(lon) else 0, 
+        ),
         zoom = 15
         ),
     margin={"r": 0, "t": 0, "l": 0, "b": 0},
