@@ -1,5 +1,5 @@
 name: Check for runtime errors
-on: [pull_request, push]
+on: [pull_request]
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -15,6 +15,6 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
       - name: execute test script for 1 minute
-        run: |
+        run: | #this will timeout after 1 minute, but it specifically ignores timeout errors so that the timeout will be successful
           timeout 1 python ./src/main.py test || code=$?; if [[ $code -ne 124 && $code -ne 0 ]]; then exit $code; fi
     
