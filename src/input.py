@@ -35,6 +35,7 @@ def getInput(cache, portName):
 
 def getTestInput(cache, portName): #generate sample telemtry for testing the dashboard
     counter = 0
+    time.sleep(10)
     while(1):
         counter += 1
         time.sleep(.1)
