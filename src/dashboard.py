@@ -4,57 +4,15 @@ import plotly.graph_objects as go
 from dash.dependencies import Input, Output
 import cache
 import logging
-import dash_vtk
-from dash_vtk.utils import to_volume_state
-import vtk
-from dash_vtk.utils import to_mesh_state
-from vtkmodules.vtkImagingCore import vtkRTAnalyticSource
-import os
 import numpy as np
 from datetime import timedelta
 
 app = dash.Dash()
 
-
-rocketObjPath = r"./assets/SR2.obj"
-rocketMtlPath = r"./assets/SR2.mtl"
-
-# importer = vtk.vtkOBJImporter()
-# importer.SetFileName(rocketObjPath)
-# importer.SetFileNameMTL(rocketMtlPath)
-# importer.SetTexturePath(os.path.dirname(rocketObjPath))
-# importer.Read()
-# window = importer.GetRenderWindow()
-# renderer = window.GetRenderers().GetItemAsObject(0)
-# actors = renderer.GetActors()
-# actors = [actors.GetItemAsObject(i) for i in range(actors.GetNumberOfItems())]
-# meshes = [a.GetMapper().GetInput() for a in actors]
-
-reader = vtk.vtkOBJReader()
-reader.SetFileName(rocketObjPath)
-reader.Update()
-
-dataset = reader.GetOutput()
-
-mesh_state = to_mesh_state(dataset)
-
 #arrangment of dashboard using HTML
 app.layout = html.Div(
     [
         html.H2('Catalyst-2', style={'color':"#aaaaaa"}),
-        html.Div(
-            style={"width": "30%", "height": "50%", "display": "inline-block"},
-            children=[
-                dash_vtk.View([
-                    dash_vtk.GeometryRepresentation(
-                        [dash_vtk.Mesh(state=mesh_state)]
-                    )],
-                    cameraViewUp=[0.1,0.2,1.8],
-                    #cameraPosition=[1, 1, 0],
-                    id="orientation"
-                )
-            ],
-        ),
         html.Div([
             dcc.Graph(id="altitude", figure=go.FigureWidget()),
         ], style={"width": "65%", "height": "50%", "display": "inline-block"}),
@@ -78,7 +36,6 @@ log.setLevel(logging.ERROR)
 @app.callback(
         Output('altitude', 'figure'),
         Output('flightState', 'children'),
-        Output('orientation', 'cameraViewUp'),
         Output('LocationMap','figure'),
         Input('interval-component', 'n_intervals'))
 def updateDashboard(n):
@@ -86,9 +43,8 @@ def updateDashboard(n):
         cache.cacheValue(inputCache.get())
     altitudeFig = updateAltitude()
     currentState = updateFlightState()
-    orientation = updateOrientation()
     mapFig = updateMap()
-    return altitudeFig, currentState, orientation, mapFig
+    return altitudeFig, currentState, mapFig
 
 #start Dashboard with above configuration
 def startDash(dataQueue):
@@ -118,6 +74,9 @@ def updateAltitude():
         altitudeData = np.extract(timeAfterLanding, altitudeData)
         altitudeTime = np.extract(timeAfterLanding, altitudeTime)
 
+    yRangeMin = min(altitudeData) if len(altitudeData) else 0
+    yRangeMax = max(altitudeData) * 1.01 + 10 if len(altitudeData) else 10
+
     fig = go.Figure(
         data=[go.Scatter
             (x=altitudeTime, 
@@ -129,7 +88,7 @@ def updateAltitude():
             height=500,
             template="plotly_dark",
             xaxis={'title': "Time"},
-            yaxis={'title': "Altitude (m)", 'range': (min(altitudeData), max(altitudeData) * 1.01 + 10)},
+            yaxis={'title': "Altitude (m)", 'range': (yRangeMin, yRangeMax)},
         )
     )
     if(cache.flightState["ASCENDING"] != 0):
@@ -145,9 +104,6 @@ def updateFlightState():
     currentState = 'Current State: ' + cache.flightState["last"]
     return currentState
 
-def updateOrientation():
-    return [0,1,0]
-
 def updateMap():
 
     lat = cache.locationCache["latitude"]
@@ -159,7 +115,10 @@ def updateMap():
     hovermode='closest',
     mapbox=dict(
         style = "white-bg",
-        center = dict(lat = lat[-1], lon = lon[-1]),
+        center = dict(
+            lat = lat[-1] if len(lat) else 0, 
+            lon = lon[-1] if len(lon) else 0, 
+        ),
         zoom = 15,
         layers = [{
             "below": 'traces',
