@@ -66,6 +66,14 @@ def updateAltitude():
         altitudeData = np.extract(timeBeforeLaunch, altitudeData)
         altitudeTime = np.extract(timeBeforeLaunch, altitudeTime)
 
+    elif len(altitudeData):
+        #before launch, maintain the last 10 seconds of altitude data on the graph
+
+        timeWindow = altitudeTime > altitudeTime[-1] - timedelta(seconds=10)
+
+        altitudeData = np.extract(timeWindow, altitudeData)
+        altitudeTime = np.extract(timeWindow, altitudeTime)
+
     if(cache.flightState["last"] == "LANDED" and cache.altitudeCache["time"][-1].timestamp() * 1000 >= (cache.flightState["LANDED"].timestamp() * 1000 + 5000)):
         #check to see if the time on the data is 5 seconds after the landing
 
