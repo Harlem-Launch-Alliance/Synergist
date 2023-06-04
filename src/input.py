@@ -25,7 +25,8 @@ def getInput(cache, portName):
             try:
                 dataValue = serialString.decode('Ascii')
             except:
-                print("ERROR: Invalid input")
+                print("ERROR: Invalid non-ASCII input: check radio connection or baudrate")
+                continue
     
             milliseconds = str(int(time.time() * 1000))
             dataString = milliseconds + " " + dataValue
