@@ -12,7 +12,7 @@ app = dash.Dash()
 #arrangment of dashboard using HTML
 app.layout = html.Div(
     [
-        html.H2('Catalyst-2', style={'color':"#aaaaaa"}),
+        html.H2('Synergist', style={'color':"#aaaaaa"}),
         html.Div([
             dcc.Graph(id="altitude", figure=go.FigureWidget()),
         ], style={"width": "65%", "height": "50%", "display": "inline-block"}),
